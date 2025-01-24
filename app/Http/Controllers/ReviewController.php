@@ -7,16 +7,17 @@ use App\Http\Requests\UpdateReviewRequest;
 use App\Http\Resources\ReviewResource;
 use App\Models\Review;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection; // Add this import
 
 class ReviewController extends Controller
 {
     /**
      * Display a listing of reviews with their associated reviewable entities.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
      
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
         $reviews = Review::with(['reviewable'])->paginate(10);
         return ReviewResource::collection($reviews);
@@ -26,10 +27,10 @@ class ReviewController extends Controller
      * Store a newly created review in storage.
      *
      * @param  \App\Http\Requests\StoreReviewRequest  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \App\Http\Resources\ReviewResource
      */
      
-    public function store(StoreReviewRequest $request)
+    public function store(StoreReviewRequest $request): ReviewResource
     {
         $validated = $request->validated();
 
@@ -42,10 +43,10 @@ class ReviewController extends Controller
      * Display the specified review with its associated reviewable entity.
      *
      * @param  \App\Models\Review  $review
-     * @return \Illuminate\Http\JsonResponse
+     * @return \App\Http\Resources\ReviewResource
      */
      
-    public function show(Review $review)
+    public function show(Review $review): ReviewResource
     {
         $review->load(['reviewable']);
         return new ReviewResource($review);
@@ -56,10 +57,10 @@ class ReviewController extends Controller
      *
      * @param  \App\Http\Requests\UpdateReviewRequest  $request
      * @param  \App\Models\Review  $review
-     * @return \Illuminate\Http\JsonResponse
+     * @return \App\Http\Resources\ReviewResource
      */
      
-    public function update(UpdateReviewRequest $request, Review $review)
+    public function update(UpdateReviewRequest $request, Review $review): ReviewResource
     {
         $validated = $request->validated();
 
@@ -75,7 +76,7 @@ class ReviewController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
      
-    public function destroy(Review $review)
+    public function destroy(Review $review): \Illuminate\Http\JsonResponse
     {
         $review->delete();
         return response()->json(['message' => 'Review deleted successfully.'], 200);

@@ -14,7 +14,7 @@ class AuthorController extends Controller
      * Display a listing of authors with their books and reviews.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
      
     public function index(Request $request)
@@ -36,7 +36,7 @@ class AuthorController extends Controller
      * Store a newly created author in storage.
      *
      * @param  \App\Http\Requests\StoreAuthorRequest  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \App\Http\Resources\AuthorResource
      */
      
     public function store(StoreAuthorRequest $request)
@@ -52,7 +52,7 @@ class AuthorController extends Controller
      * Display the specified author with their books and reviews.
      *
      * @param  \App\Models\Author  $author
-     * @return \Illuminate\Http\JsonResponse
+     * @return \App\Http\Resources\AuthorResource
      */
      
     public function show(Author $author)
@@ -66,7 +66,7 @@ class AuthorController extends Controller
      *
      * @param  \App\Http\Requests\UpdateAuthorRequest  $request
      * @param  \App\Models\Author  $author
-     * @return \Illuminate\Http\JsonResponse
+     * @return \App\Http\Resources\AuthorResource
      */
      
     public function update(UpdateAuthorRequest $request, Author $author)

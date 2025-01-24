@@ -7,16 +7,17 @@ use App\Http\Requests\UpdateCategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection; // Add this import
 
 class CategoryController extends Controller
 {
     /**
      * Display a listing of categories.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
      
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
         $categories = Category::all();
         return CategoryResource::collection($categories);
@@ -26,10 +27,10 @@ class CategoryController extends Controller
      * Store a newly created category in storage.
      *
      * @param  \App\Http\Requests\StoreCategoryRequest  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \App\Http\Resources\CategoryResource
      */
      
-    public function store(StoreCategoryRequest $request)
+    public function store(StoreCategoryRequest $request): CategoryResource
     {
         $validated = $request->validated();
 
@@ -42,10 +43,10 @@ class CategoryController extends Controller
      * Display the specified category.
      *
      * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\JsonResponse
+     * @return \App\Http\Resources\CategoryResource
      */
      
-    public function show(Category $category)
+    public function show(Category $category): CategoryResource
     {
         return new CategoryResource($category);
     }
@@ -55,10 +56,10 @@ class CategoryController extends Controller
      *
      * @param  \App\Http\Requests\UpdateCategoryRequest  $request
      * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\JsonResponse
+     * @return \App\Http\Resources\CategoryResource
      */
      
-    public function update(UpdateCategoryRequest $request, Category $category)
+    public function update(UpdateCategoryRequest $request, Category $category): CategoryResource
     {
         $validated = $request->validated();
 
@@ -74,7 +75,7 @@ class CategoryController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
      
-    public function destroy(Category $category)
+    public function destroy(Category $category): \Illuminate\Http\JsonResponse
     {
         $category->delete();
         return response()->json(['message' => 'Category deleted successfully.'], 200);
