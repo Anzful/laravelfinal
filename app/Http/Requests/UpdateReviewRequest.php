@@ -50,18 +50,31 @@ class UpdateReviewRequest extends FormRequest
                 'sometimes',
                 'required_with:reviewable_type',
                 'integer',
-                // Dynamically set exists rule based on reviewable_type
-                Rule::exists(function ($attribute, $value) {
-                    $type = $this->input('reviewable_type', $this->reviewable_type);
-                    if (in_array($type, ['App\Models\Book', 'App\Models\Author'])) {
-                        return [
-                            'table' => (new $type)->getTable(),
-                            'column' => 'id',
-                        ];
-                    }
-                }),
+                // The 'exists' rule will be conditionally added in withValidator()
             ],
         ];
+    }
+
+    /**
+     * Configure the validator instance.
+     *
+     * @param \Illuminate\Validation\Validator $validator
+     * @return void
+     */
+    public function withValidator($validator)
+    {
+        // Apply 'exists' rule based on 'reviewable_type'
+        $validator->sometimes('reviewable_id', [
+            'exists:books,id'
+        ], function ($input) {
+            return $input->reviewable_type === 'App\Models\Book';
+        });
+
+        $validator->sometimes('reviewable_id', [
+            'exists:authors,id'
+        ], function ($input) {
+            return $input->reviewable_type === 'App\Models\Author';
+        });
     }
 
     /**
